@@ -4,13 +4,14 @@ import android.os.AsyncTask;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
 public class ReaderData {
     public static ReaderData theInstance = new ReaderData();
-    private static final String URL1 = "http://4pda.ru/page/1/";
+    static final String URL1 = "http://4pda.ru/page/1/";
     private AsyncTask mLoadTask;
     Document mDocument;
     void load() {
@@ -37,14 +38,16 @@ public class ReaderData {
                     Log.d("document="+document);
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("\n\n\n=====================\n\n\n");
-                    Elements articles = document.select("article.post");
+                    Elements articles = getArticles(document);
                     Log.d("sel: "+articles);
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("els size = " + articles.size());
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("name:"+articles.get(0).getElementsByAttributeValue("itemprop","name"));
+                    Log.d("name:"+getName(articles.get(0)));
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("descr:"+articles.get(0).getElementsByAttributeValue("itemprop","description"));
+                    Log.d("descr:"+getDescription(articles.get(0)));
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("\n\n\n=====================\n\n\n");
@@ -58,6 +61,20 @@ public class ReaderData {
 
 
     }
+
+    static Elements getArticles(Document document) {
+        return document.select("article.post");
+    }
+    static String getName(Element e) {
+        return e.getElementsByAttributeValue("itemprop","name").text();
+    }
+    static String getDescription(Element e) {
+        return e.getElementsByAttributeValue("itemprop","description").text();
+    }
+    static String getImageUrl(Element e) {
+        return null;////e.getElementsByAttributeValue("itemprop","description").text();
+    }
+
     Document wtLoad(String url) {
         try {
             Document doc  = Jsoup.connect(url).get();
