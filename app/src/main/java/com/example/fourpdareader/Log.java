@@ -50,4 +50,26 @@ public class Log {
 			d("---'''--- " + t + " ---'''---");
 		}
 	}
+	/**
+	 * Get the name of method specified by depth in the call stack.
+	 * @param depth depth in the call stack (0 means current method, 1 means calling method, etc.)
+	 * @return class name . method name ()
+	 */
+	public static String getMethodInfo(final int depth)
+	{
+		final StackTraceElement[] ste = new Throwable().getStackTrace();
+		return ste[depth].getClassName()+"."+ste[depth].getMethodName()+"()";
+	}
+	public static void f() {
+		d("### "+ getMethodInfo(2));
+	}
+    public static void ff() {
+        d("### "+ getMethodInfo(2));
+        d("### <"+ getMethodInfo(3));
+    }
+    public static void fff() {
+        d("### "+ getMethodInfo(2));
+        d("### <"+ getMethodInfo(3));
+        d("### <<"+ getMethodInfo(4));
+    }
 }

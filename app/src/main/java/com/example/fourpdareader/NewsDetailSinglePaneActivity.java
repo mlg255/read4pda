@@ -55,8 +55,8 @@ public class NewsDetailSinglePaneActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(NewsDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(NewsDetailFragment.ARG_ITEM_ID));
+            arguments.putString(NewsDetailFragment.ARG_ITEM_URL,
+                    getIntent().getStringExtra(NewsDetailFragment.ARG_ITEM_URL));
             NewsDetailFragment fragment = new NewsDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -34,6 +35,7 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private SimpleItemRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +72,28 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
         ReaderData.theInstance.load();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ReaderData.setOnChangeListener(mOnChangeListener);
+    }
+
+    @Override
+    protected void onPause() {
+        ReaderData.setOnChangeListener(null);
+        super.onPause();
+    }
+
+    private ReaderData.OnChangeListener mOnChangeListener = new ReaderData.OnChangeListener() {
+        @Override
+        public void onDataSetChanged() {
+            Log.d("mAdapter.notifyDataSetChanged();");
+            mAdapter.notifyDataSetChanged();
+        }
+    };
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        mAdapter = new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS);
+        recyclerView.setAdapter(mAdapter);
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -92,16 +114,19 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            Log.d("onBindViewHolder("+holder+","+position+")");
+            DummyContent.DummyItem item = mValues.get(position);
+            holder.mItem = item;
+            holder.mTitleView.setText(item.title);
+            holder.mContentView.setText(item.descr);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(NewsDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(NewsDetailFragment.ARG_ITEM_URL, holder.mItem.mainUri);
+                        arguments.putString(NewsDetailFragment.ARG_ITEM_TITLE, holder.mItem.title);
                         NewsDetailFragment fragment = new NewsDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -110,7 +135,8 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, NewsDetailSinglePaneActivity.class);
-                        intent.putExtra(NewsDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(NewsDetailFragment.ARG_ITEM_URL, holder.mItem.mainUri);
+                        intent.putExtra(NewsDetailFragment.ARG_ITEM_TITLE, holder.mItem.title);
 
                         context.startActivity(intent);
                     }
@@ -120,19 +146,24 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
+            Log.d("getItemCount "+mValues);
+            Log.f();
+            Log.d("getItemCount ==> "+mValues.size());
             return mValues.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
+            public final ImageView mImageView;
+            public final TextView mTitleView;
             public final TextView mContentView;
             public DummyContent.DummyItem mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
+                mImageView = (ImageView) view.findViewById(R.id.image);
+                mTitleView = (TextView) view.findViewById(R.id.title);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
 

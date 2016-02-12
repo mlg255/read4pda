@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.example.fourpdareader.dummy.DummyContent;
@@ -19,15 +20,13 @@ import com.example.fourpdareader.dummy.DummyContent;
  */
 public class NewsDetailFragment extends Fragment {
     /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
+     * The fragment argument representing the news item URL
      */
-    public static final String ARG_ITEM_ID = "item_id";
-
+    public static final String ARG_ITEM_URL = "item_url";
     /**
-     * The dummy content this fragment is presenting.
+     * The fragment argument representing the news item title
      */
-    private DummyContent.DummyItem mItem;
+    public static final String ARG_ITEM_TITLE = "item_title";
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,30 +39,22 @@ public class NewsDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+        if (getArguments().containsKey(ARG_ITEM_TITLE)) {
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(getArguments().getString(ARG_ITEM_TITLE));
             }
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.news_detail, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.anews_detail)).setText(mItem.details);
-        }
-
+        WebView rootView = (WebView) inflater.inflate(R.layout.news_detail, container, false);
+        rootView.getSettings().setJavaScriptEnabled(true);
+        rootView.loadUrl(getArguments().getString(ARG_ITEM_URL));
         return rootView;
     }
 }

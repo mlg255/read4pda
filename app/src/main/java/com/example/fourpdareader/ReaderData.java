@@ -2,6 +2,8 @@ package com.example.fourpdareader;
 
 import android.os.AsyncTask;
 
+import com.example.fourpdareader.dummy.DummyContent;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +15,7 @@ public class ReaderData {
     public static ReaderData theInstance = new ReaderData();
     static final String URL1 = "http://4pda.ru/page/1/";
     private AsyncTask mLoadTask;
+    static OnChangeListener sListener = null;
     Document mDocument;
     void load() {
         if (mLoadTask == null) {
@@ -53,6 +56,7 @@ public class ReaderData {
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("\n\n\n=====================\n\n\n");
                     Log.d("\n\n\n=====================\n\n\n");
+                    setContent(articles);
                 }
             };
             at.execute();
@@ -78,6 +82,16 @@ public class ReaderData {
         return e.getElementsByAttributeValue("itemprop","url").attr("href");
     }
 
+    static void setContent(Elements articles) {
+        DummyContent.clear();
+        for (Element a : articles) {
+            DummyContent.addItem(getName(a), getDescription(a), getImageUrl(a), getFullUrl(a));
+        }
+        Log.d("sListener="+sListener);
+        if (sListener != null) {
+            sListener.onDataSetChanged();
+        }
+    }
     Document wtLoad(String url) {
         try {
             Document doc  = Jsoup.connect(url).get();
@@ -85,6 +99,21 @@ public class ReaderData {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+    public interface OnChangeListener {
+        void onDataSetChanged();
+    }
+
+    /**
+     * Set the listener to refresh the RecyclerView adapter
+     * To be run on the UI thread.
+     * @param listener
+     */
+    public static void setOnChangeListener(OnChangeListener listener) {
+        sListener = listener;
+        if (sListener != null) {
+            sListener.onDataSetChanged();
         }
     }
 }
