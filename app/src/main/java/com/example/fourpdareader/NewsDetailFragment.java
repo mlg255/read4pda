@@ -13,8 +13,8 @@ import com.example.fourpdareader.dummy.DummyContent;
 
 /**
  * A fragment representing a single ANews detail screen.
- * This fragment is either contained in a {@link NewsListActivity}
- * in two-pane mode (on tablets) or a {@link NewsDetailActivity}
+ * This fragment is either contained in a {@link NewsListTwoPaneActivity}
+ * in two-pane mode (on tablets) or a {@link NewsDetailSinglePaneActivity}
  * on handsets.
  */
 public class NewsDetailFragment extends Fragment {

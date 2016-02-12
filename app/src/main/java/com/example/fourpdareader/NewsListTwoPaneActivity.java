@@ -23,11 +23,11 @@ import java.util.List;
  * An activity representing a list of NewsList. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link NewsDetailActivity} representing
+ * lead to a {@link NewsDetailSinglePaneActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListTwoPaneActivity extends AppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -37,6 +37,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("NewsListTwoPaneActivity.onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
@@ -108,7 +109,7 @@ public class NewsListActivity extends AppCompatActivity {
                                 .commit();
                     } else {
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, NewsDetailActivity.class);
+                        Intent intent = new Intent(context, NewsDetailSinglePaneActivity.class);
                         intent.putExtra(NewsDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
                         context.startActivity(intent);

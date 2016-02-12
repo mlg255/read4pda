@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         >
         <activity
-            android:name=".NewsListActivity"
+            android:name=".NewsListTwoPaneActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,13 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewsDetailActivity"
+            android:name=".NewsDetailSinglePaneActivity"
             android:label="@string/title_anews_detail"
-            android:parentActivityName=".NewsListActivity"
+            android:parentActivityName=".NewsListTwoPaneActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NewsListActivity" />
+                android:value=".NewsListTwoPaneActivity" />
         </activity>
     </application>
 

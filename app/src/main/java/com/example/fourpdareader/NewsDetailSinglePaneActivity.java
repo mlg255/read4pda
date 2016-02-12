@@ -15,12 +15,13 @@ import android.view.MenuItem;
  * An activity representing a single ANews detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link NewsListActivity}.
+ * in a {@link NewsListTwoPaneActivity}.
  */
-public class NewsDetailActivity extends AppCompatActivity {
+public class NewsDetailSinglePaneActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("NewsDetailSinglePaneActivity.onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
@@ -78,7 +79,7 @@ public class NewsDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, NewsListActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, NewsListTwoPaneActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
