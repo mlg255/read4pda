@@ -95,11 +95,17 @@ public class ReaderDataTest extends ApplicationTestCase<Application> {
         assertThat(articles, notNullValue());
         assertThat(articles.size(), is(1));
         Element article = articles.get(0);
+        String s = article.toString();
+        assertThat(s.startsWith("<article"), is(true));
+        assertThat(s.endsWith("</article>"), is(true));
         String _title="Инсайды #441: HTC One M10, Apple A10, секрет Evleaks и Android Marshmallow для Samsung";
         String _content="В сети за последние 24 часа: Evleaks собирается \"взорвать мозг\" поклонникам Windows; TSMC может стать единственным производителем процессоров для iPhone 7; в Android 6.0 для Samsung Galaxy S6 и Galaxy S6 Edge будет внедрено множество новшеств; HTC One M10 оснастят ультрабыстрым гибридным автофокусом; смарт-часы HTC могут поступить в продажу до конца апреля; Samsung подарит Gear VR каждому предзаказавшему Galaxy S7.";
         String _image="http://s.4pda.to/9DGFsJbz1sLgqz11hYz1z1djtrxcfGvL1tKQy4W9.jpg";
+        String _fullUrl ="http://4pda.ru/2016/02/11/275879/";
         assertThat(ReaderData.getName(article), is(_title));
         assertThat(ReaderData.getDescription(article), is(_content));
         assertThat(ReaderData.getImageUrl(article), is(_image));
+        assertThat(ReaderData.getFullUrl(article), is(_fullUrl));
+        assertThat("all done", 4, is(15));
     }
 }

@@ -72,7 +72,10 @@ public class ReaderData {
         return e.getElementsByAttributeValue("itemprop","description").text();
     }
     static String getImageUrl(Element e) {
-        return null;////e.getElementsByAttributeValue("itemprop","description").text();
+        return e.getElementsByAttributeValue("itemprop","image").attr("src");
+    }
+    static String getFullUrl(Element e) {
+        return e.getElementsByAttributeValue("itemprop","url").attr("href");
     }
 
     Document wtLoad(String url) {
