@@ -15,14 +15,14 @@ import android.view.MenuItem;
  * An activity representing a single ANews detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link ANewsListActivity}.
+ * in a {@link NewsListActivity}.
  */
-public class ANewsDetailActivity extends AppCompatActivity {
+public class NewsDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anews_detail);
+        setContentView(R.layout.activity_news_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,14 +54,17 @@ public class ANewsDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ANewsDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ANewsDetailFragment.ARG_ITEM_ID));
-            ANewsDetailFragment fragment = new ANewsDetailFragment();
+            arguments.putString(NewsDetailFragment.ARG_ITEM_ID,
+                    getIntent().getStringExtra(NewsDetailFragment.ARG_ITEM_ID));
+            NewsDetailFragment fragment = new NewsDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.anews_detail_container, fragment)
+                    .add(R.id.news_detail_container, fragment)
                     .commit();
         }
+
+        Log.d("\n\n\n=============\n\n\n\n");
+        ReaderData.theInstance.load();
     }
 
     @Override
@@ -75,7 +78,7 @@ public class ANewsDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, ANewsListActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, NewsListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

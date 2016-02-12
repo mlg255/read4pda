@@ -13,11 +13,11 @@ import com.example.fourpdareader.dummy.DummyContent;
 
 /**
  * A fragment representing a single ANews detail screen.
- * This fragment is either contained in a {@link ANewsListActivity}
- * in two-pane mode (on tablets) or a {@link ANewsDetailActivity}
+ * This fragment is either contained in a {@link NewsListActivity}
+ * in two-pane mode (on tablets) or a {@link NewsDetailActivity}
  * on handsets.
  */
-public class ANewsDetailFragment extends Fragment {
+public class NewsDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -33,7 +33,7 @@ public class ANewsDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ANewsDetailFragment() {
+    public NewsDetailFragment() {
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ANewsDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.anews_detail, container, false);
+        View rootView = inflater.inflate(R.layout.news_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
