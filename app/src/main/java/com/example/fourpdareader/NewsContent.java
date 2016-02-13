@@ -1,11 +1,7 @@
-package com.example.fourpdareader.dummy;
-
-import com.example.fourpdareader.Log;
+package com.example.fourpdareader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -13,17 +9,17 @@ import java.util.Map;
  * <p/>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DummyContent {
+public class NewsContent {
 
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<NewsItem> ITEMS = new ArrayList<NewsItem>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-//    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+//    public static final Map<String, NewsItem> ITEM_MAP = new HashMap<String, NewsItem>();
 
     public static void clear() {
         ITEMS.clear();
@@ -31,7 +27,7 @@ public class DummyContent {
     public static void addItem(String title, String descr, String imageUri, String mainUri) {
         Log.d("addNewsItem["+title+"]");
         Log.f();
-        DummyItem item = new DummyItem(title, descr, imageUri, mainUri);
+        NewsItem item = new NewsItem(title, descr, imageUri, mainUri);
         ITEMS.add(item);
         Log.d("addNewsItem: size=" + ITEMS.size());
     }
@@ -42,13 +38,13 @@ public class DummyContent {
 //        }
 //    }
 
-//    private static void addItem(DummyItem item) {
+//    private static void addItem(NewsItem item) {
 //        ITEMS.add(item);
 //        ITEM_MAP.put(item.id, item);
 //    }
 
-//    private static DummyItem createDummyItem(int position) {
-//        return new DummyItem(title, descr, imageUri, mainUri, String.valueOf(position), "Item " + position, makeDetails(position));
+//    private static NewsItem createDummyItem(int position) {
+//        return new NewsItem(title, descr, imageUri, mainUri, String.valueOf(position), "Item " + position, makeDetails(position));
 //    }
 
 //    private static String makeDetails(int position) {
@@ -63,14 +59,14 @@ public class DummyContent {
     /**
      * A dummy item representing a piece of content.
      */
-    public static class DummyItem {
+    public static class NewsItem {
 
         public final String title;
         public final String descr;
         public final String imageUri;
         public final String mainUri;
 
-        public DummyItem(String title, String descr, String imageUri, String mainUri) {
+        public NewsItem(String title, String descr, String imageUri, String mainUri) {
             this.title = title;
             this.descr = descr;
             this.imageUri = imageUri;

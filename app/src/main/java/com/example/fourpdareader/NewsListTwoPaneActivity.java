@@ -15,9 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.example.fourpdareader.dummy.DummyContent;
-
 import java.util.List;
 
 /**
@@ -92,16 +89,16 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
         }
     };
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        mAdapter = new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS);
+        mAdapter = new SimpleItemRecyclerViewAdapter(NewsContent.ITEMS);
         recyclerView.setAdapter(mAdapter);
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<NewsContent.NewsItem> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<NewsContent.NewsItem> items) {
             mValues = items;
         }
 
@@ -115,7 +112,7 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.d("onBindViewHolder("+holder+","+position+")");
-            DummyContent.DummyItem item = mValues.get(position);
+            NewsContent.NewsItem item = mValues.get(position);
             holder.mItem = item;
             holder.mTitleView.setText(item.title);
             holder.mContentView.setText(item.descr);
@@ -156,7 +153,7 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             public final ImageView mImageView;
             public final TextView mTitleView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public NewsContent.NewsItem mItem;
 
             public ViewHolder(View view) {
                 super(view);

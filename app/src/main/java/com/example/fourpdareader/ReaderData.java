@@ -2,8 +2,6 @@ package com.example.fourpdareader;
 
 import android.os.AsyncTask;
 
-import com.example.fourpdareader.dummy.DummyContent;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -83,9 +81,9 @@ public class ReaderData {
     }
 
     static void setContent(Elements articles) {
-        DummyContent.clear();
+        NewsContent.clear();
         for (Element a : articles) {
-            DummyContent.addItem(getName(a), getDescription(a), getImageUrl(a), getFullUrl(a));
+            NewsContent.addItem(getName(a), getDescription(a), getImageUrl(a), getFullUrl(a));
         }
         Log.d("sListener="+sListener);
         if (sListener != null) {
