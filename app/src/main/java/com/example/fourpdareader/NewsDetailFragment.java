@@ -1,16 +1,11 @@
 package com.example.fourpdareader;
 
-import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.TextView;
-
-import com.example.fourpdareader.dummy.DummyContent;
 
 /**
  * A fragment representing a single ANews detail screen.
@@ -41,11 +36,12 @@ public class NewsDetailFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_TITLE)) {
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(getArguments().getString(ARG_ITEM_TITLE));
-            }
+// we don't need it... for now
+//            Activity activity = this.getActivity();
+//            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+//            if (appBarLayout != null) {
+//                appBarLayout.setTitle(getArguments().getString(ARG_ITEM_TITLE));
+//            }
         }
     }
 

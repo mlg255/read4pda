@@ -146,7 +146,6 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            Log.d("getItemCount "+mValues);
             Log.f();
             Log.d("getItemCount ==> "+mValues.size());
             return mValues.size();

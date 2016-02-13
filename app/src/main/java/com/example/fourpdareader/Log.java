@@ -24,12 +24,21 @@ public class Log {
 			android.util.Log.d(tag(), s);
 		}
 	}
+
+	/**
+	 * Make a string to be used as the tag for android.util.Log.d(tag,message)
+	 * @return a tag
+	 */
 	static private String tag() {
 		return "4pda[" + Thread.currentThread().getName()+"]"+getTimestamp();
 	}
+
+	/**
+	 * @return current time as a string
+	 */
 	private static String getTimestamp() {
 		long time = System.currentTimeMillis();
-		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss.SSS");
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
 		String date = sdf.format(new Date(time)).toString();
 		return date;
 	}
@@ -60,13 +69,23 @@ public class Log {
 		final StackTraceElement[] ste = new Throwable().getStackTrace();
 		return ste[depth].getClassName()+"."+ste[depth].getMethodName()+"()";
 	}
+
+	/**
+	 * Print the class name and the method name of the caller to the log.
+	 */
 	public static void f() {
 		d("### "+ getMethodInfo(2));
 	}
+	/**
+	 * Print the class and the method names of the caller and the caller's caller to the log.
+	 */
     public static void ff() {
         d("### "+ getMethodInfo(2));
         d("### <"+ getMethodInfo(3));
     }
+	/**
+	 * Print the class and method names of the last 3 functions on the call stack to the log.
+	 */
     public static void fff() {
         d("### "+ getMethodInfo(2));
         d("### <"+ getMethodInfo(3));
