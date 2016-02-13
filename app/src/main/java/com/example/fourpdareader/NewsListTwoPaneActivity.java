@@ -94,7 +94,7 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
     }
 
     public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<NewsItemViewHolder> {
 
         private final List<NewsContent.NewsItem> mValues;
 
@@ -103,15 +103,15 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public NewsItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.news_list_content, parent, false);
-            return new ViewHolder(view);
+            return new NewsItemViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            Log.d("onBindViewHolder("+holder+","+position+")");
+        public void onBindViewHolder(final NewsItemViewHolder holder, int position) {
+            Log.d("onBindViewHolder(" + holder + "," + position + ")");
             NewsContent.NewsItem item = mValues.get(position);
             holder.mItem = item;
             holder.mTitleView.setText(item.title);
@@ -147,26 +147,26 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             Log.d("getItemCount ==> "+mValues.size());
             return mValues.size();
         }
+    }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final ImageView mImageView;
-            public final TextView mTitleView;
-            public final TextView mContentView;
-            public NewsContent.NewsItem mItem;
+    public static class NewsItemViewHolder extends RecyclerView.ViewHolder {
+        public final View mView;
+        public final ImageView mImageView;
+        public final TextView mTitleView;
+        public final TextView mContentView;
+        public NewsContent.NewsItem mItem;
 
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mImageView = (ImageView) view.findViewById(R.id.image);
-                mTitleView = (TextView) view.findViewById(R.id.title);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
+        public NewsItemViewHolder(View view) {
+            super(view);
+            mView = view;
+            mImageView = (ImageView) view.findViewById(R.id.image);
+            mTitleView = (TextView) view.findViewById(R.id.title);
+            mContentView = (TextView) view.findViewById(R.id.content);
+        }
 
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
+        @Override
+        public String toString() {
+            return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
 }
