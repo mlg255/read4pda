@@ -65,6 +65,9 @@ public class ReaderData {
     }
 
     static Elements getArticles(Document document) {
+        if (document == null) {
+            return null;
+        }
         return document.select("article.post");
     }
     static String getName(Element e) {
@@ -82,8 +85,10 @@ public class ReaderData {
 
     static void setContent(Elements articles) {
         NewsContent.clear();
-        for (Element a : articles) {
-            NewsContent.addItem(getName(a), getDescription(a), getImageUrl(a), getFullUrl(a));
+        if (articles != null) {
+            for (Element a : articles) {
+                NewsContent.addItem(getName(a), getDescription(a), getImageUrl(a), getFullUrl(a));
+            }
         }
         Log.d("sListener="+sListener);
         if (sListener != null) {
