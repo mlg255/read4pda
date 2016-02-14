@@ -33,6 +33,7 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     private SimpleItemRecyclerViewAdapter mAdapter;
+    private static String sLastSelectedTitle = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +101,33 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
         private final int NOSEL = -1;
         private final int TYPE_UNSELECTED = 0;
         private final int TYPE_SELECTED = 1;
-        private int mSelected = NOSEL;
+        private int _mSelected = NOSEL;
 
         public SimpleItemRecyclerViewAdapter(List<NewsContent.NewsItem> items) {
             mValues = items;
         }
 
+        /**
+         * true if this title is selected in the title list
+         * @param position
+         * @return
+         */
+        boolean isSelected(int position) {
+            return _mSelected == position;
+        }
+
+        /**
+         * Set selection on the title specified by position
+         * @param position
+         * @param selected
+         */
+        void setSelected(int position, boolean selected) {
+            if (selected) {
+                _mSelected = position;
+            } else {
+                _mSelected = NOSEL;
+            }
+        }
         @Override
         public NewsItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
@@ -130,12 +152,12 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (_pos == mSelected && !mTwoPane) {
-                        mSelected = NOSEL;
+                    if (isSelected(_pos) && !mTwoPane) {
+                        setSelected(_pos, false);
                         notifyDataSetChanged();
                         return;
                     }
-                    mSelected = _pos;
+                    setSelected(_pos, true);
                     notifyDataSetChanged();
 
                     if (mTwoPane) {
@@ -168,7 +190,7 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
 
         @Override
         public int getItemViewType(int position) {
-            return position == mSelected ? TYPE_SELECTED : TYPE_UNSELECTED;
+            return isSelected(position) ? TYPE_SELECTED : TYPE_UNSELECTED;
         }
     }
 
