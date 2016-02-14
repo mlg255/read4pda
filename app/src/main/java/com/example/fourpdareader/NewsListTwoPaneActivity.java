@@ -116,6 +116,9 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             holder.mItem = item;
             holder.mTitleView.setText(item.title);
             holder.mContentView.setText(item.descr);
+            if (!ImageLoader.loadImage(holder)) {
+                holder.mImageView.setImageResource(R.drawable.default_4pda);
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
