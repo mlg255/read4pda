@@ -97,6 +97,10 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<NewsItemViewHolder> {
 
         private final List<NewsContent.NewsItem> mValues;
+        private final int NOSEL = -1;
+        private final int TYPE_UNSELECTED = 0;
+        private final int TYPE_SELECTED = 1;
+        private int mSelected = NOSEL;
 
         public SimpleItemRecyclerViewAdapter(List<NewsContent.NewsItem> items) {
             mValues = items;
@@ -105,8 +109,10 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
         @Override
         public NewsItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.news_list_content, parent, false);
-            return new NewsItemViewHolder(view);
+                    .inflate(viewType == TYPE_UNSELECTED
+                            ? R.layout.news_list_content
+                            : R.layout.news_list_content_sel, parent, false);
+            return new NewsItemViewHolder(view, viewType);
         }
 
         @Override
@@ -119,10 +125,19 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             if (!ImageLoader.loadImage(holder)) {
                 holder.mImageView.setImageResource(R.drawable.default_4pda);
             }
+            final int _pos = position;
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (_pos == mSelected && !mTwoPane) {
+                        mSelected = NOSEL;
+                        notifyDataSetChanged();
+                        return;
+                    }
+                    mSelected = _pos;
+                    notifyDataSetChanged();
+
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putString(NewsDetailFragment.ARG_ITEM_URL, holder.mItem.mainUri);
@@ -150,6 +165,11 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             Log.d("getItemCount ==> "+mValues.size());
             return mValues.size();
         }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position == mSelected ? TYPE_SELECTED : TYPE_UNSELECTED;
+        }
     }
 
     public static class NewsItemViewHolder extends RecyclerView.ViewHolder {
@@ -157,10 +177,12 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
         public final ImageView mImageView;
         public final TextView mTitleView;
         public final TextView mContentView;
+        public final int mType;
         public NewsContent.NewsItem mItem;
 
-        public NewsItemViewHolder(View view) {
+        public NewsItemViewHolder(View view, int type) {
             super(view);
+            mType = type;
             mView = view;
             mImageView = (ImageView) view.findViewById(R.id.image);
             mTitleView = (TextView) view.findViewById(R.id.title);
