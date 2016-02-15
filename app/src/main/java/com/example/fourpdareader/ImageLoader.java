@@ -1,16 +1,14 @@
 package com.example.fourpdareader;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
 public abstract class ImageLoader {
     /**
@@ -27,11 +25,10 @@ public abstract class ImageLoader {
         // E.g. if we add a weak reference to the bitmap, in onLowMemory()/onTrimMemory()
         // we can set all fields BitmapHolder.bitmap to null and be sure that only
         // currently referenced bitmaps survive garbage collection.
-        // Alternatively, we can add a last access time stamp and keep N last recently used items.
     }
 
-    /** The cache */
-    static HashMap<String, BitmapHolder> sMap = new HashMap<>();
+    /** The bitmap cache */
+    static LruCache<String, BitmapHolder> sCache = new LruCache<>(60);
 
     /**
      * Retrieve a BitmapHolder from the cache.
@@ -39,8 +36,8 @@ public abstract class ImageLoader {
      * @return the BitmapHolder associated with url, or null
      */
     static BitmapHolder getBitmapHolder(String url) {
-        synchronized (sMap) {
-            return sMap.get(url);
+        synchronized (sCache) {
+            return sCache.get(url);
         }
     }
 
@@ -54,12 +51,12 @@ public abstract class ImageLoader {
      * @return the BitmapHolder associated with the url
      */
     static BitmapHolder haveBitmapHolder(String url, BitmapHolder newBitmapHolder) {
-        synchronized (sMap) {
-            BitmapHolder bh = sMap.get(url);
+        synchronized (sCache) {
+            BitmapHolder bh = sCache.get(url);
             if (bh != null) {
                 return bh;
             } else {
-                sMap.put(url, newBitmapHolder);
+                sCache.put(url, newBitmapHolder);
                 return newBitmapHolder;
             }
         }

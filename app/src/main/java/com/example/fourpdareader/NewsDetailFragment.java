@@ -34,15 +34,16 @@ public class NewsDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_TITLE)) {
-
+        // we don't set the title in two-pane mode
+//        if (getArguments().containsKey(ARG_ITEM_TITLE)) {
+//
 // we don't need it... for now
 //            Activity activity = this.getActivity();
 //            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
 //            if (appBarLayout != null) {
 //                appBarLayout.setTitle(getArguments().getString(ARG_ITEM_TITLE));
 //            }
-        }
+//        }
     }
 
     @Override
