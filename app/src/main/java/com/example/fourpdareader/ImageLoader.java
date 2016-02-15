@@ -10,6 +10,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * This class is responsible for loading and downsampling 4pda.ru images from the news list
+ * on the front page.
+ * The images at 4pda are 400x300, while we need 40x30 dpi.
+ */
 public abstract class ImageLoader {
     /**
      * Downsampling constant.
@@ -18,13 +23,10 @@ public abstract class ImageLoader {
     public static final int BITMAP_IN_SAMPLE_SIZE = 8;
     /**
      * An auxiliary wrapper for a bitmap.
+     * Hypothetically, in the future we may associate some attributes with bitmaps.
      */
     static class BitmapHolder {
         Bitmap bitmap;
-        // TODO attributes to support removal from the cache
-        // E.g. if we add a weak reference to the bitmap, in onLowMemory()/onTrimMemory()
-        // we can set all fields BitmapHolder.bitmap to null and be sure that only
-        // currently referenced bitmaps survive garbage collection.
     }
 
     /** The bitmap cache */

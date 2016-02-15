@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 /**
- * An activity representing a single ANews detail screen. This
+ * An activity representing a single News detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link NewsListTwoPaneActivity}.

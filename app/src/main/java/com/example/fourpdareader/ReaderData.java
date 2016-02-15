@@ -10,11 +10,21 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class ReaderData {
+    /** the singleton */
     public static ReaderData theInstance = new ReaderData();
+    /** URL of the 1st page */
     static final String URL1 = "http://4pda.ru/page/1/";
+    /** The task that loads and parses the first page */
     private AsyncTask mLoadTask;
+    /** A Listener to inform the Activity about arrived data */
     static OnChangeListener sListener = null;
-    Document mDocument;
+
+    /**
+     * Asynchronously load and parse the first page, then call the current OnChangeListener
+     * on the UI thread.
+     * If an error happens, the result Document is null.
+     * TODO handle null result
+     */
     void load() {
         if (mLoadTask == null) {
             AsyncTask<Void, Void, Document> at = new AsyncTask<Void, Void, Document>() {
@@ -35,54 +45,68 @@ public class ReaderData {
                     Log.d("ReaderData.load.onPostExecute");
                     super.onPostExecute(document);
                     mLoadTask = null;
-                    mDocument = document;
-//                    Log.d("document="+document);
-//                    Log.d("\n\n\n=====================\n\n\n");
-//                    Log.d("\n\n\n=====================\n\n\n");
                     Elements articles = getArticles(document);
-                    //Log.d("sel: "+articles);
-//                    Log.d("\n\n\n=====================\n\n\n");
-//                    Log.d("els size = " + articles.size());
-//                    Log.d("\n\n\n=====================\n\n\n");
-                    //Log.d("name:"+articles.get(0).getElementsByAttributeValue("itemprop","name"));
-                    //Log.d("name:"+getName(articles.get(0)));
-//                    Log.d("\n\n\n=====================\n\n\n");
-                    //Log.d("descr:"+articles.get(0).getElementsByAttributeValue("itemprop","description"));
-                    //Log.d("descr:"+getDescription(articles.get(0)));
-//                    Log.d("\n\n\n=====================\n\n\n");
-//                    Log.d("\n\n\n=====================\n\n\n");
-//                    Log.d("\n\n\n=====================\n\n\n");
-//                    Log.d("\n\n\n=====================\n\n\n");
-//                    Log.d("\n\n\n=====================\n\n\n");
                     setContent(articles);
                 }
             };
             at.execute();
             mLoadTask = at;
         }
-
-
     }
 
+    /**
+     * Get the list of articles
+     * @param document
+     * @return a list, each article is an Element in it
+     */
     static Elements getArticles(Document document) {
         if (document == null) {
             return null;
         }
         return document.select("article.post");
     }
+
+    /**
+     * Get the title of an article.
+     * @param e an article from the list of articles
+     * @return
+     */
     static String getName(Element e) {
         return e.getElementsByAttributeValue("itemprop","name").text();
     }
+
+    /**
+     * Get a short "preview" version of the text of the article.
+     * @param e an article from the list of articles
+     * @return
+     */
     static String getDescription(Element e) {
         return e.getElementsByAttributeValue("itemprop","description").text();
     }
+
+    /**
+     * Get the URL of the image shown in the list of news.
+     * @param e an article from the list of articles
+     * @return
+     */
     static String getImageUrl(Element e) {
         return e.getElementsByAttributeValue("itemprop","image").attr("src");
     }
+
+    /**
+     * Get the URL of the full version of the article.
+     * @param e an article from the list of articles
+     * @return
+     */
     static String getFullUrl(Element e) {
         return e.getElementsByAttributeValue("itemprop","url").attr("href");
     }
 
+    /**
+     * Extract information from articles to NewsContent.ITEMS.
+     *
+     * @param articles a list of articles
+     */
     static void setContent(Elements articles) {
         NewsContent.clear();
         if (articles != null) {
@@ -95,6 +119,12 @@ public class ReaderData {
             sListener.onDataSetChanged();
         }
     }
+
+    /**
+     * Download on the worker thread.
+     * @param url
+     * @return
+     */
     Document wtLoad(String url) {
         try {
             Document doc  = Jsoup.connect(url).get();
@@ -104,7 +134,15 @@ public class ReaderData {
             return null;
         }
     }
+
+    /**
+     * This interface lets the Activity know that the loading is complete.
+     */
     public interface OnChangeListener {
+        /**
+         * Invoked after the page is loaded and parsed.
+         * The method is called on the UI thread.
+         */
         void onDataSetChanged();
     }
 

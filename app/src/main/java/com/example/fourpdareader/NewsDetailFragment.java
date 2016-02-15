@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 /**
- * A fragment representing a single ANews detail screen.
+ * A fragment representing a single News detail screen.
  * This fragment is either contained in a {@link NewsListTwoPaneActivity}
  * in two-pane mode (on tablets) or a {@link NewsDetailSinglePaneActivity}
  * on handsets.
