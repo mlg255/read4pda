@@ -12,18 +12,24 @@ import java.util.List;
 public class NewsContent {
 
     /**
-     * An array of sample (dummy) items.
+     * An array of news items.
      */
     public static final List<NewsItem> ITEMS = new ArrayList<NewsItem>();
 
     /**
-     * A map of sample (dummy) items, by ID.
+     * Clear the list of known news items.
      */
-//    public static final Map<String, NewsItem> ITEM_MAP = new HashMap<String, NewsItem>();
-
     public static void clear() {
         ITEMS.clear();
     }
+
+    /**
+     * Add a news item to the collection of known news items.
+     * @param title news title
+     * @param descr description, that is, beginning of the text
+     * @param imageUri URL of the image
+     * @param mainUri URL of the full article text
+     */
     public static void addItem(String title, String descr, String imageUri, String mainUri) {
         Log.d("addNewsItem["+title+"]");
         Log.f();
@@ -31,33 +37,9 @@ public class NewsContent {
         ITEMS.add(item);
         Log.d("addNewsItem: size=" + ITEMS.size());
     }
-//    static {
-//        // Add some sample items.
-//        for (int i = 1; i <= COUNT; i++) {
-//            addItem(createDummyItem(i));
-//        }
-//    }
-
-//    private static void addItem(NewsItem item) {
-//        ITEMS.add(item);
-//        ITEM_MAP.put(item.id, item);
-//    }
-
-//    private static NewsItem createDummyItem(int position) {
-//        return new NewsItem(title, descr, imageUri, mainUri, String.valueOf(position), "Item " + position, makeDetails(position));
-//    }
-
-//    private static String makeDetails(int position) {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("Details about Item: ").append(position);
-//        for (int i = 0; i < position; i++) {
-//            builder.append("\nMore details information here.");
-//        }
-//        return builder.toString();
-//    }
 
     /**
-     * A dummy item representing a piece of content.
+     * A news item. The objects of this class are immutable.
      */
     public static class NewsItem {
 
@@ -73,9 +55,38 @@ public class NewsContent {
             this.mainUri = mainUri;
         }
 
+        /**
+         * Comparison by the title and the main URI.
+         * @param o another object
+         * @return true if o is a NewsItem whose title and mainUri match.
+         */
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            NewsItem newsItem = (NewsItem) o;
+
+            if (title != null ? !title.equals(newsItem.title) : newsItem.title != null)
+                return false;
+            return !(mainUri != null ? !mainUri.equals(newsItem.mainUri) : newsItem.mainUri != null);
+
+        }
+
+        /**
+         * Calculate the hash code, only title and mainUri are used.
+         * @return hash code
+         */
+        @Override
+        public int hashCode() {
+            int result = title != null ? title.hashCode() : 0;
+            result = 31 * result + (mainUri != null ? mainUri.hashCode() : 0);
+            return result;
+        }
+
 //        @Override
 //        public String toString() {
-//            return content;
+//            return title;
 //        }
     }
 }

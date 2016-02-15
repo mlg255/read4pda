@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +27,14 @@ import java.util.List;
  */
 public class NewsListTwoPaneActivity extends AppCompatActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
+    /** Whether or not the activity is in two-pane mode, i.e. running on a tablet device. */
     private boolean mTwoPane;
+
+    /** The adapter for the list of articles */
     private SimpleItemRecyclerViewAdapter mAdapter;
-    private static String sLastSelectedTitle = "";
+
+    /** The selected article. NewsItem instances are immutable. */
+    private static NewsContent.NewsItem sLastSelectedNewsItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,11 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+            if (sLastSelectedNewsItem != null) {
+                mAdapter.openInThePane2(sLastSelectedNewsItem);
+            }
         }
 
-        Log.d("\n\n\n=============\n\n\n\n");
         ReaderData.theInstance.load();
     }
 
@@ -89,6 +92,7 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             mAdapter.notifyDataSetChanged();
         }
     };
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         mAdapter = new SimpleItemRecyclerViewAdapter(NewsContent.ITEMS);
         recyclerView.setAdapter(mAdapter);
@@ -98,34 +102,32 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<NewsItemViewHolder> {
 
         private final List<NewsContent.NewsItem> mValues;
-        private final int NOSEL = -1;
         private final int TYPE_UNSELECTED = 0;
         private final int TYPE_SELECTED = 1;
-        private int _mSelected = NOSEL;
 
         public SimpleItemRecyclerViewAdapter(List<NewsContent.NewsItem> items) {
             mValues = items;
         }
 
         /**
-         * true if this title is selected in the title list
-         * @param position
-         * @return
+         * Check if this news item is selected in the title list
+         * @param newsItem
+         * @return true if the uri and the title of newsItem match
          */
-        boolean isSelected(int position) {
-            return _mSelected == position;
+        boolean isSelected(NewsContent.NewsItem newsItem) {
+            return newsItem != null && newsItem.equals(sLastSelectedNewsItem);
         }
 
         /**
-         * Set selection on the title specified by position
-         * @param position
-         * @param selected
+         * Set selection on the news item
+         * @param newsItem
+         * @param selected false to clear selection
          */
-        void setSelected(int position, boolean selected) {
+        void setSelected(NewsContent.NewsItem newsItem, boolean selected) {
             if (selected) {
-                _mSelected = position;
+                sLastSelectedNewsItem = newsItem;
             } else {
-                _mSelected = NOSEL;
+                sLastSelectedNewsItem = null;
             }
         }
         @Override
@@ -147,38 +149,46 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
             if (!ImageLoader.loadImage(holder)) {
                 holder.mImageView.setImageResource(R.drawable.default_4pda);
             }
-            final int _pos = position;
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isSelected(_pos) && !mTwoPane) {
-                        setSelected(_pos, false);
+                    NewsContent.NewsItem newsItem = holder.mItem;
+                    if (isSelected(newsItem) && !mTwoPane) {
+                        setSelected(newsItem, false);
                         notifyDataSetChanged();
                         return;
                     }
-                    setSelected(_pos, true);
+                    setSelected(newsItem, true);
                     notifyDataSetChanged();
 
                     if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(NewsDetailFragment.ARG_ITEM_URL, holder.mItem.mainUri);
-                        arguments.putString(NewsDetailFragment.ARG_ITEM_TITLE, holder.mItem.title);
-                        NewsDetailFragment fragment = new NewsDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.news_detail_container, fragment)
-                                .commit();
+                        openInThePane2(newsItem);
                     } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, NewsDetailSinglePaneActivity.class);
-                        intent.putExtra(NewsDetailFragment.ARG_ITEM_URL, holder.mItem.mainUri);
-                        intent.putExtra(NewsDetailFragment.ARG_ITEM_TITLE, holder.mItem.title);
-
-                        context.startActivity(intent);
+                        openInActivity(newsItem);
                     }
                 }
             });
+        }
+
+        private void openInActivity(NewsContent.NewsItem newsItem) {
+            Context context = NewsListTwoPaneActivity.this;
+            Intent intent = new Intent(context, NewsDetailSinglePaneActivity.class);
+            intent.putExtra(NewsDetailFragment.ARG_ITEM_URL, newsItem.mainUri);
+            intent.putExtra(NewsDetailFragment.ARG_ITEM_TITLE, newsItem.title);
+
+            context.startActivity(intent);
+        }
+
+        private void openInThePane2(NewsContent.NewsItem newsItem) {
+            Bundle arguments = new Bundle();
+            arguments.putString(NewsDetailFragment.ARG_ITEM_URL, newsItem.mainUri);
+            arguments.putString(NewsDetailFragment.ARG_ITEM_TITLE, newsItem.title);
+            NewsDetailFragment fragment = new NewsDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.news_detail_container, fragment)
+                    .commit();
         }
 
         @Override
@@ -190,7 +200,8 @@ public class NewsListTwoPaneActivity extends AppCompatActivity {
 
         @Override
         public int getItemViewType(int position) {
-            return isSelected(position) ? TYPE_SELECTED : TYPE_UNSELECTED;
+            NewsContent.NewsItem item = mValues.get(position);
+            return isSelected(item) ? TYPE_SELECTED : TYPE_UNSELECTED;
         }
     }
 
